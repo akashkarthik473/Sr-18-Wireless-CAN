@@ -37,8 +37,9 @@ def send_can(canid: int, data: list[int], delay: Optional[float] = 0.5):
     bus.send(msg)
     time.sleep(delay/1000) # ms -> s
 
+send_can(canid=0x001, data=[0x11, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x01], delay=0.5) # gloabl session opener
 # Random frames (not sure what they do)
-send_can(canid=0x001, data=[0x11, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x01], delay=0.5)
+
 send_can(canid=0x001, data=[0x03, 0xFF], delay=0.7)
 send_can(canid=0x001, data=[0x01, 0xFF], delay=0.9)
 
@@ -58,6 +59,10 @@ time.sleep(42)
 server_ack = False
 # while server_ack != True:
 
+# bootloader ack from the vcu
 for i in range(0x00, 0x100):
     send_can(canid=0x001, data=[0x14, i], delay=6)
     server_response(canid=0x002, data=[])
+
+send_can(canid=0x11, data = [0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]) #keep alive heartbeat
+send_can(canid=0x11, data = [0xFF, 0x00, 0x00, 0x00, 0x00, 0x00])
